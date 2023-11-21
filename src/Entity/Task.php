@@ -2,6 +2,7 @@
 
 namespace App\Entity;
 
+use App\Repository\ProviderRepository;
 use App\Repository\TaskRepository;
 use Doctrine\ORM\Mapping as ORM;
 
@@ -71,5 +72,12 @@ class Task
         $this->difficulty = $difficulty;
 
         return $this;
+    }
+
+    public function createTasks(ProviderRepository $providerRepository)
+    {
+        foreach ($providerRepository as $provider) {
+            return $provider->getUrl();
+        }
     }
 }
