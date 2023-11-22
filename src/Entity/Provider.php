@@ -72,8 +72,4 @@ class Provider
 
         return $this;
     }
-
-    public function providers()
-    {
-    }
 }

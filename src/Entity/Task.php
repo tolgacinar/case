@@ -73,11 +73,4 @@ class Task
 
         return $this;
     }
-
-    public function createTasks(ProviderRepository $providerRepository)
-    {
-        foreach ($providerRepository as $provider) {
-            return $provider->getUrl();
-        }
-    }
 }
