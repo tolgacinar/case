@@ -47,12 +47,16 @@ class FetchTaskCommand extends Command
         $io->progressStart();
         $io->newLine(1);
         $tasks = $this->fetchTasks($providers);
+        $this->entityManagerInterface->createQuery('DELETE FROM App\Entity\Task')->execute();
+        $io->text('Taks removed successfully!');
+        $io->newLine(1);
         foreach ($tasks as $task) {
             // $io->progressAdvance(count($tasks) % $key);
             $ntask = new Task();
             $ntask->setTitle($task['name']);
             $ntask->setDifficulty($task['difficulty']);
             $ntask->setDuration($task['duration']);
+            $ntask->setProvider($this->providerRepository->find($task['provider_id']));
 
             $this->entityManagerInterface->persist($ntask);
             $this->entityManagerInterface->flush();
@@ -91,6 +95,7 @@ class FetchTaskCommand extends Command
                     "name" => $task[json_decode($provider['params'], true)['name']],
                     "difficulty" => $task[json_decode($provider['params'], true)['difficulty']],
                     "duration" => $task[json_decode($provider['params'], true)['duration']],
+                    "provider_id" => $provider['id'],
                 ];
             }
         }
@@ -102,6 +107,7 @@ class FetchTaskCommand extends Command
         $providers = [];
         foreach ($this->providerRepository->findAll() as $provider) {
             $providers[] = [
+                'id'       => $provider->getId(),
                 'endpoint' => $provider->getUrl(),
                 'title' => $provider->getTitle(),
                 'params' => $provider->getParams(),

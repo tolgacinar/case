@@ -2,7 +2,6 @@
 
 namespace App\Entity;
 
-use App\Repository\ProviderRepository;
 use App\Repository\TaskRepository;
 use Doctrine\ORM\Mapping as ORM;
 
@@ -11,6 +10,7 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class Task
 {
+
     /**
      * @ORM\Id
      * @ORM\GeneratedValue
@@ -32,6 +32,13 @@ class Task
      * @ORM\Column(type="smallint")
      */
     private $difficulty;
+
+    /**
+     * @ORM\ManyToOne(targetEntity=Provider::class, inversedBy="task", cascade={"persist", "remove"})
+     * @ORM\JoinColumn(nullable=false)
+     */
+    private $provider;
+
 
     public function getId(): ?int
     {
@@ -70,6 +77,18 @@ class Task
     public function setDifficulty(int $difficulty): self
     {
         $this->difficulty = $difficulty;
+
+        return $this;
+    }
+
+    public function getProvider(): ?Provider
+    {
+        return $this->provider;
+    }
+
+    public function setProvider(Provider $provider): self
+    {
+        $this->provider = $provider;
 
         return $this;
     }

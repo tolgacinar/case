@@ -10,6 +10,7 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class Developer
 {
+
     /**
      * @ORM\Id
      * @ORM\GeneratedValue

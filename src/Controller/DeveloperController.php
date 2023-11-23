@@ -24,41 +24,6 @@ class DeveloperController extends AbstractController
      */
     public function index(DeveloperRepository $developerRepository, ProviderRepository $providerRepository): Response
     {
-        $developerArray = [];
-        $developers = $developerRepository->findAll();
-        foreach ($developers as $developer) {
-            $name = $developer->getName();
-            $difficulty = $developer->getDifficulty();
-            $developerArray[] = [
-                'name' => $name,
-                'difficulty' => $difficulty,
-            ];
-        }
-        foreach ($providerRepository->findAll() as $provider) {
-            $endpoint = $provider->getUrl();
-            $title = $provider->getTitle();
-            $params = $provider->getParams();
-            $params = json_decode($params, true);
-
-            $response = $this->client->request('GET', $endpoint);
-
-            if ($content = $response->getContent()) {
-                $content = json_decode($content, true);
-                foreach ($content as $task) {
-                    $this->tasks[] = [
-                        'difficulty' => $task[$params['difficulty']],
-                        'duration' => $task[$params['duration']],
-                        'name' => $task[$params['name']]
-                    ];
-                }
-            }
-        }
-
-
-
-        echo "<pre>";
-        print_r($this->tasks);
-        echo "</pre>";
         return $this->render('developer/index.html.twig', [
             'controller_name' => 'DeveloperController',
         ]);
